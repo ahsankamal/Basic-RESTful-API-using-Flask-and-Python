@@ -3,8 +3,8 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
 from security import authenticate, identity
-from user import UserRegister
-from items import Item, ItemList
+from resources.user import UserRegister
+from resources.items import Item, ItemList
 # @app.route("/")
 # def hello():
 #     return "Hello World!"
