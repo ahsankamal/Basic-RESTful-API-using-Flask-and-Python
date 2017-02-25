@@ -18,11 +18,6 @@ api = Api(app)
 jwt = JWT(app,authenticate, identity) #/auth POST
 #Header=>   Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 
-@app.before_first_request#SQLAlchemy creates tables before first request
-def create_tables():
-	db.create_all()
-
-
 #creating routes
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(Item, '/item/<string:name>') # http://127.0.0.1:5001/student/rolf
