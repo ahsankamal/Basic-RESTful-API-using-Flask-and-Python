@@ -28,7 +28,7 @@ class Item(Resource):
 		item = ItemModel(name, data['price'])
 
 		try:
-			item.insert()
+			item.save_to_database()
 		except:
 			return {"message": "exception occured while inserting item into database."}, 500	
 		return item.json(), 201 # to indicate item successful creation, 202 to indicate item will be created soon
@@ -37,34 +37,24 @@ class Item(Resource):
 	def delete(self,name):
 		# global items
 		# items = list(filter(lambda x:x['name']!=name, items))
-		connection = sqlite3.connect("data.db")
-		cursor = connection.cursor()
-		query = "DELETE from items where name = ?"
-		result = cursor.execute(query,(name,))
-		connection.commit()
-		connection.close()
-		return {'message':'Item deleted!'}
+		item = ItemModel.find_by_name(name)
+		if item:
+			item.delete_from_database()
+			return {'message':'Item deleted!'}
 
 	def put(self,name):
 		data = Item.parser.parse_args()
 		item = ItemModel.find_by_name(name)
-		updated_item = ItemModel(name, data['price'])
 		if item is None:#create
-			updated_item.insert()
+			item = ItemModel(name, data['price'])
 		else:#update
-			updated_item.update()
-		return updated_item.json()	
+			item.price = data['price']
+
+		item.save_to_database()	
+		return item.json()	
 
 
 class ItemList(Resource):
-	def get(self):
-		connection = sqlite3.connect("data.db")
-		cursor = connection.cursor()
-		query = "Select * from items"
-		result = cursor.execute(query)
-		items = []
-		for row in result:
-			items.append({"name":row[0],"price":row[1]})
-		connection.close()	
-		return {"items":items}
+	def get(self):	
+		return {"items":[item.json() for item in ItemModel.query.all()]}
 
