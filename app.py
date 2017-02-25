@@ -1,4 +1,5 @@
 # pip install Flask, Flask-RESTful, Flask-JWT, Flask-SQLALchemy
+import os
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -11,7 +12,7 @@ from resources.store import Store,StoreList
 #     return "Hello World!"
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL","sqlite:///data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #turn off flask's SQLALCHEMY modification tracker?
 app.secret_key = "abcd"
 api = Api(app)
