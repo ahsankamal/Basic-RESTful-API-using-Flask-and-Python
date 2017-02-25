@@ -5,6 +5,7 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.items import Item, ItemList
+from resources.store import Store,StoreList
 # @app.route("/")
 # def hello():
 #     return "Hello World!"
@@ -23,7 +24,9 @@ def create_tables():
 
 
 #creating routes
+api.add_resource(Store, '/store/<string:name>')
 api.add_resource(Item, '/item/<string:name>') # http://127.0.0.1:5001/student/rolf
+api.add_resource(StoreList, '/stores')
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 
